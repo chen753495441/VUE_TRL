@@ -5,7 +5,8 @@ import './plugins/vant.js'
 import { Lazyload } from 'vant';
 import axios from 'axios'
 
-axios.defaults.baseURL='http://127.0.0.1:8089/portal/'
+
+axios.defaults.baseURL='http://111.231.145.104:8089/portal/'
 //通过axios拦截器添加token验证
 axios.interceptors.request.use(config => {
     config.headers.Authorization = window.sessionStorage.getItem('username')

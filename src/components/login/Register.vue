@@ -90,7 +90,6 @@
                     this.reusername = 1;
                     return Toast.fail('用户名已存在！');
                 }
-                console.log(res)
                 this.reusername = 0;
                 Toast.success('用户名可以注册！')
             },

@@ -136,7 +136,7 @@
             //获取购物车中商品条数
             async getCartNum(){
                 const {data:res} = await this.$http.post('cart/get_cart_product_count.do')
-                if(res.status!=200)console.log('获取购物车商品条数失败')
+                if(res.status!=200)return Toast.fail('获取购物车商品条数失败')
                 this.num=res.data
             }
         },

@@ -4,30 +4,31 @@
         <van-row>
             <van-col span="6">
                 <!--左侧分类菜单-->
-                <van-sidebar v-model="activeKey">
-                    <van-sidebar-item :title="item.name" v-for="item in menulist" :key="item.id"
-                                      @click="setParentId(item.id)"/>
-                </van-sidebar>
+                <van-sticky>
+                    <van-sidebar v-model="activeKey">
+                        <van-sidebar-item :title="item.name" v-for="item in menulist" :key="item.id"
+                                          @click="setParentId(item.id)"/>
+                    </van-sidebar>
+                </van-sticky>
             </van-col>
             <van-col>
                 <van-row :class="['bdbottom',i1===0?'bdtop':'']"  v-for="(items,i1) in productlist" :key="items.id">
                     <!--二级分类-->
-                    <van-col>
-                        <van-tag type="primary" size="large">
-                            {{items.name}}
-                        </van-tag>
-                        <van-icon name="play" />
-                    </van-col>
-                    <!--三级分类-->
-                    <van-col>
-                        <van-row :class="['bdbottom',i2===0?'bdtop':'']" v-for="(itemss,i2) in items.children" :key="itemss.id">
+                    <!--折叠面板-->
+                    <van-collapse v-model="activeNames">
+                        <van-collapse-item :title="items.name" :name="items.id">
+                            <!--三级分类-->
                             <van-col>
-                                <van-tag type="warning">
-                                    {{itemss.name}}
-                                </van-tag>
+                                <van-row :class="['bdbottom',i2===1?'bdtop':'']" v-for="(itemss,i2) in items.children" :key="itemss.id">
+                                    <van-col>
+                                        <van-tag type="warning">
+                                            {{itemss.name}}
+                                        </van-tag>
+                                    </van-col>
+                                </van-row>
                             </van-col>
-                        </van-row>
-                    </van-col>
+                        </van-collapse-item>
+                    </van-collapse>
                 </van-row>
             </van-col>
         </van-row>
@@ -42,8 +43,14 @@
                 menulist: [],
                 activeKey: 0,
                 parentId: 1,
-                productlist: []
+                productlist: [],
+                activeNames: ['0']
             }
+        },
+        onChange(event) {
+            this.setData({
+                activeNames: event.detail
+            });
         },
         created() {
             this.getMenuList()
@@ -62,7 +69,6 @@
                 params.append('categoryId', this.parentId);
                 const {data: res} = await this.$http.post('manage/category/get_deep_category.do', params)
                 if (res.status != 200) return this.$message.error('获取右侧分类菜单失败')
-                console.log(res)
                 this.productlist = res.data[0].children
             },
             //设置当前选中的左侧侧边栏

@@ -64,18 +64,27 @@
                 <van-grid-item text="会员" />
             </van-grid-item>
         </van-grid>
-    </div>
 
+        <!--商品展示区域-->
+        <van-card v-for="item in productlist" :key="item.id"
+                :num="item.stock"
+                :price="item.price"
+                :title="item.subtitle"
+                :thumb="item.mainImage"
+                  @click="ToGoods(item.id)"
+        />
+        <br>
+        <br>
+        <br>
+    </div>
 </template>
 
 <script>
     export default {
         data(){
             return {
-                images: [
-                    'https://img.yzcdn.cn/vant/apple-1.jpg',
-                    'https://img.yzcdn.cn/vant/apple-2.jpg'
-                ]
+                images: [],
+                productlist: [],
             }
         },
         methods:{
@@ -84,7 +93,22 @@
             },
             ToLogin(){
                 this.$router.push("/login")
+            },
+            async getProductList() {
+                const {data: res} = await this.$http.post('product/detailNewOrHotOrBanner.do')
+                if (res.status != 200) return this.$message.error('获取商品失败')
+                this.productlist = res.data
+                for(var i=0;i<5;i++){
+                    this.images.push(res.data[i].mainImage)
+                }
+            },
+            ToGoods(goodId){
+                window.sessionStorage.setItem('goodsId',goodId)
+                this.$router.push('/goods');
             }
+        },
+        created(){
+            this.getProductList()
         }
     }
 </script>

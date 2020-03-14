@@ -90,6 +90,7 @@
                     const {data:res} = await this.$http.post('address/search.do')
                     if(res.status!=200)return Toast.fail('获取用户地址失败')
                     this.address = res.data[0]
+                    window.sessionStorage.setItem('shippingId',this.address.id)
                 }
                 else{
                     var params = new FormData();
@@ -104,8 +105,8 @@
                 params.append('shippingId', window.sessionStorage.getItem('shippingId'));
                 const {data:res} = await this.$http.post('order/create.do',params)
                 if(res.status!=200) return Toast.fail('创建订单失败')
-                window.sessionStorage.setItem("orderNo")
-                this.$router.push('/')
+                window.sessionStorage.setItem('orderNo',res.data.orderNo)
+                this.$router.push('/paypicture')
             },
             //设置收货地址
             ToAddress() {
