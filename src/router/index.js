@@ -16,6 +16,7 @@ import Pay from '../components/pay/Pay'
 import Settlement from '../components/pay/Settlement'
 import SetAddress from '../components/address/Setaddress'
 import PayPicture from '../components/pay/PayPicture'
+import PaySuccess from '../components/pay/PaySuccess'
 
 Vue.use(VueRouter)
 
@@ -46,7 +47,8 @@ const router = new VueRouter({
           redirect:'/settlement',
           children: [
               {path:'/settlement',component:Settlement},
-              {path:'/paypicture',component:PayPicture}
+              {path:'/paypicture',component:PayPicture},
+              {path:'/paysuccess',component:PaySuccess}
 ]
       },
       {path:'/setaddress',component:SetAddress}
